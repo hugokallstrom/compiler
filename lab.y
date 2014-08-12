@@ -7,7 +7,7 @@
 extern int yylex();
 extern int yyparse();
 extern int yyerror(const char *msg);
-int write=0,read=0;
+int s = 0;
 %}
 
 %union {
@@ -18,10 +18,11 @@ int write=0,read=0;
 		QUADLIST truelist, falselist;
 	} exp;
 
-	struct {
+	/*struct {
 		SYMBOL place;
 		SYMBOL next;
-	} explist;
+	} explist;*/
+	SYMBOL explist[100];
 	SYMBOL symb;
 }
 %token <name> BEGINSY DOSY ELSESY ENDSY FUNCSY IFSY INTSY READSY THENSY WHILESY WRITESY PROGSY OTHERSY
@@ -79,18 +80,15 @@ stat		:	compstat
 		|	IFSY expr THENSY stat ELSESY stat	{}
 		|	WHILESY expr DOSY stat
 		|	WRITESY LPAREN exprlist RPAREN SEMI	{}
-		|	READSY LPAREN exprlist RPAREN SEMI	{ emit($1, $3.place, SNULL, 0);
-								  fprintf(stderr, "READ ID: %s %s %s\n", $3.place->id, $3.next->id, $1);
-								 /* while($3.place != SNULL) {*/
-									$3.place = $3.next; 
-									fprintf(stderr, "READ ID: %s NEXT: %s\n", $3.place->id, $3.next->id);
-								  /*};*/}
+		|	READSY LPAREN exprlist RPAREN SEMI	{ /*emit($1, $3.place, SNULL, 0);*/
+								  fprintf(stderr, "READ ID: %s NEXT: %s\n", $3[s--]->id, $3[s--]->id); }
 		|	IDENT ASSIGN expr SEMI			{ emit($2, lookup($1), $3.place, 0); }
 		|	fname ASSIGN expr SEMI
 		;
 	
-exprlist	:	exprlist COMMA expr	{ $$.next = $3.place;} 
-		|	expr	{ $$.next = $1.place; }
+exprlist	:	exprlist COMMA expr	{ $$[s] = $1[1];
+						  $$[s++] = $3.place;fprintf(stderr, "s=%d\n", s);} 
+		|	expr	{ $$[s++] = $1.place;fprintf(stderr, "s=%d\n", s); }
 		;
 
 expr		:	aexp RELOP aexp

@@ -76,7 +76,7 @@
 extern int yylex();
 extern int yyparse();
 extern int yyerror(const char *msg);
-int write=0,read=0;
+int s = 0;
 
 
 /* Line 268 of yacc.c  */
@@ -178,16 +178,17 @@ typedef union YYSTYPE
 		QUADLIST truelist, falselist;
 	} exp;
 
-	struct {
+	/*struct {
 		SYMBOL place;
 		SYMBOL next;
-	} explist;
+	} explist;*/
+	SYMBOL explist[100];
 	SYMBOL symb;
 
 
 
 /* Line 293 of yacc.c  */
-#line 191 "y.tab.c"
+#line 192 "y.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -199,7 +200,7 @@ typedef union YYSTYPE
 
 
 /* Line 343 of yacc.c  */
-#line 203 "y.tab.c"
+#line 204 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -503,10 +504,10 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    37,    37,    41,    42,    45,    48,    51,    52,    55,
-      56,    58,    61,    64,    65,    68,    71,    74,    75,    78,
-      79,    80,    81,    82,    88,    89,    92,    94,    97,    98,
-     101,   102,   103,   104,   105,   106,   109,   110
+       0,    38,    38,    42,    43,    46,    49,    52,    53,    56,
+      57,    59,    62,    65,    66,    69,    72,    75,    76,    79,
+      80,    81,    82,    83,    85,    86,    89,    91,    94,    95,
+      98,    99,   100,   101,   102,   103,   106,   107
 };
 #endif
 
@@ -1487,125 +1488,121 @@ yyreduce:
         case 2:
 
 /* Line 1806 of yacc.c  */
-#line 38 "lab.y"
+#line 39 "lab.y"
     { /*emit($1, insert($2,1,2), SNULL, 0);*/ }
     break;
 
   case 7:
 
 /* Line 1806 of yacc.c  */
-#line 51 "lab.y"
+#line 52 "lab.y"
     { insert((yyvsp[(3) - (3)].name), 1, 1); }
     break;
 
   case 8:
 
 /* Line 1806 of yacc.c  */
-#line 52 "lab.y"
+#line 53 "lab.y"
     { insert((yyvsp[(1) - (1)].name), 1, 1); }
     break;
 
   case 15:
 
 /* Line 1806 of yacc.c  */
-#line 68 "lab.y"
+#line 69 "lab.y"
     { insert((yyvsp[(1) - (1)].name), 1, 2); }
     break;
 
   case 20:
 
 /* Line 1806 of yacc.c  */
-#line 79 "lab.y"
+#line 80 "lab.y"
     {}
     break;
 
   case 22:
 
 /* Line 1806 of yacc.c  */
-#line 81 "lab.y"
+#line 82 "lab.y"
     {}
     break;
 
   case 23:
 
 /* Line 1806 of yacc.c  */
-#line 82 "lab.y"
-    { emit((yyvsp[(1) - (5)].name), (yyvsp[(3) - (5)].explist).place, SNULL, 0);
-								  fprintf(stderr, "READ ID: %s %s %s\n", (yyvsp[(3) - (5)].explist).place->id, (yyvsp[(3) - (5)].explist).next->id, (yyvsp[(1) - (5)].name));
-								 /* while($3.place != SNULL) {*/
-									(yyvsp[(3) - (5)].explist).place = (yyvsp[(3) - (5)].explist).next; 
-									fprintf(stderr, "READ ID: %s NEXT: %s\n", (yyvsp[(3) - (5)].explist).place->id, (yyvsp[(3) - (5)].explist).next->id);
-								  /*};*/}
+#line 83 "lab.y"
+    { /*emit($1, $3.place, SNULL, 0);*/
+								  fprintf(stderr, "READ ID: %s NEXT: %s\n", (yyvsp[(3) - (5)].explist)[s--]->id, (yyvsp[(3) - (5)].explist)[s--]->id); }
     break;
 
   case 24:
 
 /* Line 1806 of yacc.c  */
-#line 88 "lab.y"
+#line 85 "lab.y"
     { emit((yyvsp[(2) - (4)].val), lookup((yyvsp[(1) - (4)].name)), (yyvsp[(3) - (4)].exp).place, 0); }
     break;
 
   case 26:
 
 /* Line 1806 of yacc.c  */
-#line 92 "lab.y"
-    { (yyvsp[(1) - (3)].explist).next = (yyvsp[(3) - (3)].exp).place;
-						  (yyval.explist).next = (yyvsp[(1) - (3)].explist).place;}
+#line 89 "lab.y"
+    { (yyval.explist)[s] = (yyvsp[(1) - (3)].explist)[1];
+						  (yyval.explist)[s++] = (yyvsp[(3) - (3)].exp).place;fprintf(stderr, "s=%d\n", s);}
     break;
 
   case 27:
 
 /* Line 1806 of yacc.c  */
-#line 94 "lab.y"
-    { (yyval.explist).place = (yyvsp[(1) - (1)].exp).place; }
+#line 91 "lab.y"
+    { (yyval.explist)[s++] = (yyvsp[(1) - (1)].exp).place;fprintf(stderr, "s=%d\n", s); }
     break;
 
   case 29:
 
 /* Line 1806 of yacc.c  */
-#line 98 "lab.y"
+#line 95 "lab.y"
     { (yyval.exp).place = (yyvsp[(1) - (1)].exp).place; }
     break;
 
   case 30:
 
 /* Line 1806 of yacc.c  */
-#line 101 "lab.y"
+#line 98 "lab.y"
     { (yyval.exp).place = emit((yyvsp[(2) - (3)].val), (yyvsp[(1) - (3)].exp).place, (yyvsp[(3) - (3)].exp).place, 0); }
     break;
 
   case 31:
 
 /* Line 1806 of yacc.c  */
-#line 102 "lab.y"
+#line 99 "lab.y"
     { (yyval.exp).place = emit((yyvsp[(2) - (3)].val), (yyvsp[(1) - (3)].exp).place, (yyvsp[(3) - (3)].exp).place, 0); }
     break;
 
   case 33:
 
 /* Line 1806 of yacc.c  */
-#line 104 "lab.y"
+#line 101 "lab.y"
     { (yyval.exp).place = (yyvsp[(2) - (3)].exp).place; }
     break;
 
   case 34:
 
 /* Line 1806 of yacc.c  */
-#line 105 "lab.y"
+#line 102 "lab.y"
     { (yyval.exp).place = lookup((yyvsp[(1) - (1)].name)); }
     break;
 
   case 35:
 
 /* Line 1806 of yacc.c  */
-#line 106 "lab.y"
+#line 103 "lab.y"
     { (yyval.exp).place = insert((yyvsp[(1) - (1)].name), 1, 4); }
     break;
 
 
 
 /* Line 1806 of yacc.c  */
-#line 1609 "y.tab.c"
+#line 1606 "y.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1836,7 +1833,7 @@ yyreturn:
 
 
 /* Line 2067 of yacc.c  */
-#line 112 "lab.y"
+#line 109 "lab.y"
 
 
 int yyerror(const char *msg) {
