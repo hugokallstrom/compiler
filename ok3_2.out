@@ -1,0 +1,27 @@
+
+f1:
+v2       type INTEGER class VAR   offset  1 level  2
+v1       type INTEGER class VAR   offset  0 level  2
+
+ok3:
+5        type INTEGER class CONST offset  1 level  1
+f1       type INTEGER class FUNC  offset  1 level  1
+v1       type INTEGER class VAR   offset  0 level  1
+ok3      type INTEGER class FUNC  offset  0 level  0
+
+   0:	FSTART	ok3		   0
+   1:	FSTART	f1		   0
+   2:	READ	v2		   0
+   3:	LE	v1	v2	   5
+   4:	GOTO			   7
+   5:	RETURN	v2		   0
+   6:	GOTO			   8
+   7:	RETURN	v1		   0
+   8:	FEND	f1		   0
+   9:	READ	v1		   0
+  10:	PARAM	5		   0
+  11:	CALL	f1		   0
+  12:	PLUS	v1	temp0	   0
+  13:	WRITE	temp0		   0
+  14:	HALT			   0
+  15:	FEND	ok3		   0

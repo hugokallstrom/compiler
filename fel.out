@@ -1,0 +1,47 @@
+    1 :program fel;
+    2 :integer v1, v2;
+    3 :
+    4 :  function f1():integer;
+    5 :  integer f1v1, f1v2;
+    6 :
+    7 :    function f1a(integer p1, p2;):integer;
+    8 :    integer f1av1;
+    9 :    begin
+   10 :      f1a := (p1 + p2)*f1av1 + f1v2*v2;
+   11 :    end;
+   12 :
+   13 :  begin
+
+p1: identifier not declared
+   14 :    f1 := f1a(p1, f1v2)*v2;
+   15 :  end;
+   16 :
+   17 :  function f2(integer p1;):integer;
+   18 :  integer f2v2;
+   19 :    
+   20 :    function f2a(integer par1;):integer;
+   21 :    integer f2av2;
+   22 :    begin
+   23 :      f2av2 := f2a(44)*v2;
+   24 :    end;
+   25 :
+   26 :    function f2b():integer;
+   27 :    integer f2bv1;
+   28 :    begin
+   29 :      f2bv1 := f2v2;
+   30 :    end;
+   31 :
+   32 :  begin
+
+f1a: identifier not declared
+   33 :    f2v2 := f1a(55, 56)+f2b()*p1;
+   34 :  end;
+   35 :
+   36 :begin
+   37 :  v1 := v2*f1();
+   38 :end.
+   39 :
+f2       type INTEGER class FUNC  offset  2
+f1       type INTEGER class FUNC  offset  2
+v2       type INTEGER class VAR   offset  1
+v1       type INTEGER class VAR   offset  0

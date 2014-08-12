@@ -1,0 +1,24 @@
+
+ok2:
+3        type INTEGER class CONST offset  2 level  1
+100      type INTEGER class CONST offset  2 level  1
+12       type INTEGER class CONST offset  2 level  1
+b        type INTEGER class VAR   offset  1 level  1
+a        type INTEGER class VAR   offset  0 level  1
+ok2      type INTEGER class FUNC  offset  0 level  0
+
+   0:	FSTART	ok2		   0
+   1:	READ	b		   0
+   2:	READ	a		   0
+   3:	PLUS	100	a	   0
+   4:	TIMES	temp0	3	   0
+   5:	MINUS	12	temp0	   0
+   6:	ASS	a	temp0	   0
+   7:	PLUS	a	a	   0
+   8:	MINUS	b	b	   0
+   9:	PARTS	temp0	temp1	   0
+  10:	ASS	b	temp0	   0
+  11:	WRITE	a		   0
+  12:	WRITE	b		   0
+  13:	HALT			   0
+  14:	FEND	ok2		   0

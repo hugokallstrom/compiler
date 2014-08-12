@@ -1,0 +1,72 @@
+
+f1a:
+v1       type INTEGER class VAR   offset  3 level  3
+f1av1    type INTEGER class VAR   offset  2 level  3
+p2       type INTEGER class VAR   offset  1 level  3
+p1       type INTEGER class VAR   offset  0 level  3
+
+f1:
+23       type INTEGER class CONST offset  2 level  2
+f1a      type INTEGER class FUNC  offset  2 level  2
+f1v2     type INTEGER class VAR   offset  1 level  2
+f1v1     type INTEGER class VAR   offset  0 level  2
+
+f2a:
+44       type INTEGER class CONST offset  2 level  3
+f2av2    type INTEGER class VAR   offset  1 level  3
+par1     type INTEGER class VAR   offset  0 level  3
+
+f2b:
+f2bv1    type INTEGER class VAR   offset  0 level  3
+
+f2:
+55       type INTEGER class CONST offset  2 level  2
+f2b      type INTEGER class FUNC  offset  2 level  2
+f2a      type INTEGER class FUNC  offset  2 level  2
+f2v2     type INTEGER class VAR   offset  1 level  2
+p1       type INTEGER class VAR   offset  0 level  2
+
+ok4:
+f2       type INTEGER class FUNC  offset  2 level  1
+f1       type INTEGER class FUNC  offset  2 level  1
+v2       type INTEGER class VAR   offset  1 level  1
+v1       type INTEGER class VAR   offset  0 level  1
+ok4      type INTEGER class FUNC  offset  0 level  0
+
+   0:	FSTART	ok4		   0
+   1:	FSTART	f1		   0
+   2:	FSTART	f1a		   0
+   3:	PLUS	p1	p2	   0
+   4:	TIMES	temp0	f1av1	   0
+   5:	TIMES	f1v2	v2	   0
+   6:	PLUS	temp0	temp1	   0
+   7:	RETURN	temp0		   0
+   8:	FEND	f1a		   0
+   9:	PARAM	23		   0
+  10:	PARAM	f1v2		   0
+  11:	CALL	f1a		   0
+  12:	TIMES	temp0	v2	   0
+  13:	RETURN	temp0		   0
+  14:	FEND	f1		   0
+  15:	FSTART	f2		   0
+  16:	FSTART	f2a		   0
+  17:	PARAM	44		   0
+  18:	CALL	f2a		   0
+  19:	TIMES	temp0	v2	   0
+  20:	ASS	f2av2	temp0	   0
+  21:	FEND	f2a		   0
+  22:	FSTART	f2b		   0
+  23:	ASS	f2bv1	f2v2	   0
+  24:	FEND	f2b		   0
+  25:	PARAM	55		   0
+  26:	CALL	f2a		   0
+  27:	CALL	f2b		   0
+  28:	TIMES	temp1	p1	   0
+  29:	PLUS	temp0	temp1	   0
+  30:	ASS	f2v2	temp0	   0
+  31:	FEND	f2		   0
+  32:	CALL	f1		   0
+  33:	TIMES	v2	temp0	   0
+  34:	ASS	v1	temp0	   0
+  35:	HALT			   0
+  36:	FEND	ok4		   0
