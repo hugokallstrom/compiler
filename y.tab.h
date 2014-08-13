@@ -107,18 +107,13 @@ typedef union YYSTYPE
 		SYMBOL place;
 		QUADLIST truelist, falselist;
 	} exp;
-
-	/*struct {
-		SYMBOL place;
-		SYMBOL next;
-	} explist;*/
-	SYMBOL explist[100];
+	SYMBOL symblist[100];
 	SYMBOL symb;
 
 
 
 /* Line 2068 of yacc.c  */
-#line 122 "y.tab.h"
+#line 117 "y.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

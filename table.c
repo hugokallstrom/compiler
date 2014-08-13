@@ -64,17 +64,17 @@ SYMBOL lookup(char *s)
 
 SYMBOL emit(int op, SYMBOL a1, SYMBOL a2, int jmp)
 {
-	fprintf(stderr, "\nEMIT börjar OP: %d\n", op);
+/*	fprintf(stderr, "\nEMIT börjar OP: %d\n", op);*/
 	SYMBOL p;
 	if (a1 != SNULL)
 	{
-	fprintf(stderr, "a1: %s\n", a1->id);
+/*	fprintf(stderr, "a1: %s\n", a1->id);*/
 		if (a1->class == TEMP)
 			tempcount--;
 	}
 	if (a2 != SNULL)
 	{
-	fprintf(stderr, "a2: %s\n", a2->id);
+/*	fprintf(stderr, "a2: %s\n", a2->id);*/
 		if(a2->class == TEMP)
 			tempcount--;
 	}
@@ -85,7 +85,7 @@ SYMBOL emit(int op, SYMBOL a1, SYMBOL a2, int jmp)
 	if (op < EQ) {		/* Use temporary variable */
 		p = tempvars + tempcount;
 		p->offset = tempcount++;   /* Offset for temp.vars.=tempno */
-		fprintf(stderr, "Symbol som returneras: %s %d %p\n", p->id, p->offset, p);
+/*	fprintf(stderr, "Symbol som returneras: %s %d %p\n", p->id, p->offset, p);*/
 	}
 	else
 		p = SNULL;
@@ -163,8 +163,8 @@ void printsymbtab(void)
 	fprintf(stderr, "\n");
 	SYMBOL sp;
 	for (sp = symbtab; sp != SNULL; sp = sp->nextsym)
-		fprintf(stderr, "%-9.9stype %s class %s offset%3d\n",
-		sp->id, typ[sp->type], cl[sp->class], sp->offset);
+		fprintf(stderr, "%-9.9stype %s class %s offset%3d level%3d\n",
+		sp->id, typ[sp->type], cl[sp->class], sp->offset, sp->level);
 	fprintf(stderr, "\n");
 }
 

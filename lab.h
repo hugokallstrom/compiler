@@ -37,7 +37,9 @@
 #define	ASS     24	     /* assignment */
 #define	WRITE   25
 #define	READ    26
-#define	GOTO    27	     /* jump to target */ 	
+#define	GOTO    27	     /* jump to target */
+#define FSTART	28
+#define FEND	29 	
 #define PARAM   32           /* function parameter */
 #define CALL    33           /* call to function */
 #define RETURN  34           /* return from function */
