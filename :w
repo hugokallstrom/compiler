@@ -33,20 +33,16 @@ int s = 0;
 %left ADDOP
 %left MULOP
 %left RELOP
-%type <symb> pstart 
-%type <exp> aexp expr fname fnhead
+%type <exp> aexp expr fname
 %type <symblist> exprlist arglist
 %type <val> M 
 %type <qlist> N
 %start program
 %%
 
-program		: 	pstart dekllist fndekllist compstat PERIOD { emit(HALT, SNULL, SNULL, 0);
-								     emit(FEND, $1, SNULL, 0); }
-		;
-
-pstart		:	PROGSY IDENT SEMI	{ $$ = insert($2, 1, 2); 
-						  emit(FSTART, lookup($2), SNULL, 0); }
+program		: 	PROGSY IDENT SEMI dekllist fndekllist compstat PERIOD
+			{ makelist(0);
+			  insert($2,1,2); }
 		;
 
 dekllist 	: 	dekllist dekl
@@ -66,11 +62,10 @@ idlist		:	idlist COMMA IDENT	{ insert($3, 1, 1); }
 fndekllist	:	fndekllist fndekl
 		|
 
-fndekl		:	fnhead dekllist fndekllist compstat SEMI { emit(FEND, $1.place, SNULL, 0); }
-		; 
+fndekl		:	fnhead dekllist fndekllist compstat SEMI 
+		;
 
-fnhead		:	FUNCSY fname LPAREN parlist RPAREN COLON type SEMI { emit(FSTART, $2.place, SNULL, 0); 
-									     $$.place = $2.place; } 
+fnhead		:	FUNCSY fname LPAREN parlist RPAREN COLON type SEMI
 		;
 
 parlist		:	dekllist
@@ -101,11 +96,8 @@ stat		:	compstat
 		|	READSY LPAREN exprlist RPAREN SEMI	{ for(int i = 0; i <= s ; i++)
 								  	emit(READ, $3[i], SNULL, 0);
 								  s = 0; }
-		|	IDENT ASSIGN expr SEMI			{ if(lookup($1)->class == VAR)   
-								      emit($2, lookup($1), $3.place, 0); 
-								  if(lookup($1)->class == FUNC) 
-								      emit(RETURN, $3.place, SNULL, 0); }
-		|	fname ASSIGN expr SEMI			
+		|	IDENT ASSIGN expr SEMI			{ emit($2, lookup($1), $3.place, 0); }
+		|	fname ASSIGN expr SEMI			{ emit($2, $1.place, $3.place, 0); }
 		;
 
 M 		:	{ $$ = nextquad; } 	
