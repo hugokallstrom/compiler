@@ -30,7 +30,7 @@ SYMBOL insert(char *name, int type, int class)
 	while (r != SNULL)
 		if (strcmp(r->id, name) == 0) {
 			if (class != CONST)
-				tblerror("identifier multiply declared");
+				/*tblerror("identifier multiply declared");*/
 			return(r);
 		} else
 			r = r->nextsym;
@@ -82,7 +82,7 @@ SYMBOL emit(int op, SYMBOL a1, SYMBOL a2, int jmp)
 		fprintf(stderr, "gen: run out of space for temp.vars.\n");
 		exit(1);
 	}
-	if (op < EQ) {		/* Use temporary variable */
+	if (op < EQ || op == CALL) {		/* Use temporary variable */
 		p = tempvars + tempcount;
 		p->offset = tempcount++;   /* Offset for temp.vars.=tempno */
 /*	fprintf(stderr, "Symbol som returneras: %s %d %p\n", p->id, p->offset, p);*/
