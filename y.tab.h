@@ -104,7 +104,7 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 13 "lab.y" /* yacc.c:1909  */
+#line 18 "lab.y" /* yacc.c:1909  */
 
 	char name[32768];
 	int val;

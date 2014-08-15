@@ -10,12 +10,12 @@ int nextquad, offsetnow, currentlevel;
 int tempcount = 0;
 struct _symbol tempvars[6] =    	/* temporary variables */
 {
-	{"temp0" ,0, TEMP, 0, 0, 0, SNULL},
-	{"temp1" ,0, TEMP, 0, 0, 0, SNULL},
-	{"temp2" ,0, TEMP, 0, 0, 0, SNULL},
-	{"temp3" ,0, TEMP, 0, 0, 0, SNULL},
-	{"temp4" ,0, TEMP, 0, 0, 0, SNULL},
-	{"temp5" ,0, TEMP, 0, 0, 0, SNULL}
+	{"temp0" ,0, TEMP, 0, 0, 0, "", SNULL},
+	{"temp1" ,0, TEMP, 0, 0, 0, "", SNULL},
+	{"temp2" ,0, TEMP, 0, 0, 0, "", SNULL},
+	{"temp3" ,0, TEMP, 0, 0, 0, "", SNULL},
+	{"temp4" ,0, TEMP, 0, 0, 0, "", SNULL},
+	{"temp5" ,0, TEMP, 0, 0, 0, "", SNULL}
 };
 
 static SYMBOL symbtab = SNULL;
@@ -23,7 +23,7 @@ static SYMBOL symbtab = SNULL;
 /* SYMBOL TABLE ROUTINES  */
 
 /* insert - insert new identifier in symbol table */
-SYMBOL insert(char *name, int type, int class)
+SYMBOL insert(char *name, int type, int class, int offset, int level, char *namespaces)
 {
 	SYMBOL r;
 	r = symbtab;
@@ -41,8 +41,9 @@ SYMBOL insert(char *name, int type, int class)
 	strcpy(r->id, name);
 	r->type = type;
 	r->class = class;
-	r->level = currentlevel;
-	r->offset = offsetnow;
+	r->level = level;
+	r->offset = offset;
+	r->namespaces = namespaces;
 	r->nextsym = symbtab;
 	symbtab = r;
 	return(r);
@@ -56,7 +57,7 @@ SYMBOL lookup(char *s)
 		if (strcmp(sp->id, s) == 0)
 			return(sp);
 	tblerror("identifier not declared");    /* id not found */
-	return(insert(s, NOTYPE, UNDEF));
+	return(insert(s, NOTYPE, UNDEF, 0, 0, ""));
 }
 
 
@@ -158,13 +159,16 @@ char *op[100] = {
 
 FILE *ptree;	/* file for output */
 
-void printsymbtab(void)
+void printsymbtab(char *namespaces)
 {
-	fprintf(stderr, "\n");
+	fprintf(stderr, "%s:\n", namespaces);
 	SYMBOL sp;
-	for (sp = symbtab; sp != SNULL; sp = sp->nextsym)
-		fprintf(stderr, "%-9.9stype %s class %s offset%3d level%3d\n",
-		sp->id, typ[sp->type], cl[sp->class], sp->offset, sp->level);
+	for (sp = symbtab; sp != SNULL; sp = sp->nextsym) {
+		/*if(strcmp(sp->namespaces, namespaces) == 0) {*/
+			fprintf(stderr, "%-9.9stype %s class %s offset%3d level%3d namespaces %s\n",
+			sp->id, typ[sp->type], cl[sp->class], sp->offset, sp->level, sp->namespaces);
+		/*}*/
+	}
 	fprintf(stderr, "\n");
 }
 
