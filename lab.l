@@ -29,7 +29,8 @@ struct key {
 	"read", READSY,
 	"then", THENSY,
 	"while",WHILESY,
-	"write",WRITESY
+	"write",WRITESY,
+	"repeat",REPEATSY
 };
 %}
 LET		[a-zA-Z]

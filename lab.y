@@ -31,7 +31,7 @@ SYMBOL var;
 	} qlist;
 
 }
-%token <name> BEGINSY DOSY ELSESY ENDSY FUNCSY IFSY INTSY READSY THENSY WHILESY WRITESY PROGSY OTHERSY
+%token <name> BEGINSY DOSY ELSESY ENDSY FUNCSY IFSY INTSY READSY THENSY WHILESY WRITESY PROGSY OTHERSY REPEATSY
 %token <name> IDENT INTCONST
 %token PERIOD SEMI COMMA LPAREN RPAREN COLON
 %token <val> RELOP ADDOP MULOP ASSIGN
@@ -108,11 +108,13 @@ statlist	:	statlist stat
 stat		:	compstat
 		|	IFSY expr THENSY M stat N ELSESY M stat	{ backpatch($2.truelist, $4);
 								  backpatch($2.falselist, $8);
-								  backpatch($6.nxt, nextquad); 
-								 }
+								  backpatch($6.nxt, nextquad); }
 		|	WHILESY M expr DOSY M stat 		{ backpatch($3.truelist, $5); 
 								  emit(GOTO, SNULL, SNULL, $2);
 								  backpatch($3.falselist, nextquad); }
+/*		|	REPEATSY M stat N until M expr SEMI	{ backpatch($4.nxt, $6); 
+								  backpatch($7.falselist, $2);
+								  emit(GOTO, SNULL, SNULL, $2); }*/
 		|	WRITESY LPAREN exprlist RPAREN SEMI	{ for(int i = 0; i <= s ; i++)
 								  	emit(WRITE, $3[i], SNULL, 0);
 								  s = 0; }

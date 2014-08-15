@@ -47,7 +47,7 @@
 
 /* GENERAL DEFINITIONS, TYPE AND VARIABLE DECLARATIONS */
 
-#define NKEYS           12   /* number of keywords */ 
+#define NKEYS           13   /* number of keywords */ 
 #define MAXERR          10   /* max errors per row */
 #define LINELENGTH      80
 
