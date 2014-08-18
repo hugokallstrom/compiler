@@ -8,6 +8,11 @@ extern int yylex();
 extern int yyparse();
 extern int yyerror(const char *msg);
 int s = 0;
+int offset[100];
+char* spaces[100];
+int namespaces = 0;
+int level = 0;
+SYMBOL var;
 %}
 
 %union {
@@ -34,7 +39,7 @@ int s = 0;
 %left MULOP
 %left RELOP
 %type <symb> pstart 
-%type <exp> aexp expr fname fnhead
+%type <exp> aexp expr fname fnhead fcall
 %type <symblist> exprlist arglist
 %type <val> M 
 %type <qlist> N
@@ -45,8 +50,11 @@ program		: 	pstart dekllist fndekllist compstat PERIOD { emit(HALT, SNULL, SNULL
 								     emit(FEND, $1, SNULL, 0); }
 		;
 
-pstart		:	PROGSY IDENT SEMI	{ $$ = insert($2, 1, 2); 
-						  emit(FSTART, lookup($2), SNULL, 0); }
+pstart		:	PROGSY IDENT SEMI	{ spaces[namespaces] = $2;
+						  fprintf(stderr, "NAME: %s\n", spaces[namespaces]);
+						  $$ = insert($2, 1, 2, offset[namespaces], level, spaces[namespaces]); 
+						  emit(FSTART, lookup($2), SNULL, 0);
+						  level++; }
 		;
 
 dekllist 	: 	dekllist dekl
@@ -59,8 +67,10 @@ dekl		:	type idlist SEMI
 type		: 	INTSY
 		;
 
-idlist		:	idlist COMMA IDENT	{ insert($3, 1, 1); }
-		|	IDENT			{ insert($1, 1, 1); }
+idlist		:	idlist COMMA IDENT	{ var = insert($3, 1, 1, offset[namespaces], level, spaces[namespaces]); 
+						  offset[namespaces]++; }
+		|	IDENT			{ var = insert($1, 1, 1, offset[namespaces], level, spaces[namespaces]);
+						  offset[namespaces]++; }
 		;
 
 fndekllist	:	fndekllist fndekl
@@ -77,10 +87,18 @@ parlist		:	dekllist
 		|
 		;
 
-fname		:	IDENT	{ $$.place = insert($1, 1, 2); }
+fname		:	IDENT { $$.place = insert($1, 1, 2, offset[namespaces], level, spaces[namespaces]);
+				namespaces++;
+				level++;
+				spaces[namespaces] = $$.place->id;
+				fprintf(stderr, "name: %s\n", spaces[namespaces]); }
 		;
 
-compstat	:	BEGINSY statlist ENDSY
+fcall		: 	IDENT { $$.place = lookup($1);}
+		;
+
+compstat	:	BEGINSY statlist ENDSY { /*namespaces--;*/
+						 level--; }
 		;
 
 statlist	:	statlist stat
@@ -136,12 +154,12 @@ expr		:	aexp RELOP aexp			{ $$.place = emit($2, $1.place, $3.place, 0);
 
 aexp		:	aexp ADDOP aexp			{ $$.place = emit($2, $1.place, $3.place, 0); }
 		|	aexp MULOP aexp			{ $$.place = emit($2, $1.place, $3.place, 0); }
-		|	fname LPAREN arglist RPAREN	{ $$.place = emit(CALL, $1.place, SNULL, 0); }
+		|	fcall LPAREN arglist RPAREN	{ $$.place = emit(CALL, $1.place, SNULL, 0); }
 		|	LPAREN expr RPAREN 		{ $$.place = $2.place;
 							  $$.truelist = $2.truelist;
 							  $$.falselist = $2.falselist; }
 		|	IDENT				{ $$.place = lookup($1); }
-		|	INTCONST			{ $$.place = insert($1, 1, 4); }
+		|	INTCONST			{ $$.place = insert($1, 1, 4, offset[namespaces], level, spaces[namespaces]); }
 		;
 
 arglist		:	exprlist	{ for(int i = 0 ; i <= s ; i++)
@@ -158,7 +176,9 @@ int yyerror(const char *msg) {
 
 int main(void) {
 	yyparse();
-	printsymbtab();
+	/*for(int i = 0; i <= namespaces; i++) {*/
+		printsymbtab(spaces[0]);
+	/*}*/
 	printmcode();
  	yylex_destroy();
 	return 0;

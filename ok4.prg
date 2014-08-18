@@ -1,5 +1,5 @@
 program ok4;
-integer v1, v2;
+integer v1, v1, v2;
 
   function f1():integer;
   integer f1v1, f1v2;

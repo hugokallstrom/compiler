@@ -45,7 +45,6 @@
 #define RETURN  34           /* return from function */
 #define	HALT    99	     /* halt execution */
 
-
 /* GENERAL DEFINITIONS, TYPE AND VARIABLE DECLARATIONS */
 
 #define NKEYS           13   /* number of keywords */ 
@@ -64,6 +63,7 @@ struct _symbol {
 	int level;	             /* static level */
 	int offset;	             /* offset in block */
 	int value;	             /* value for constant */
+	char *namespaces;             /* namespace */
 	struct _symbol *nextsym;     /* next symbol */
 };
  
@@ -72,7 +72,7 @@ typedef struct _symbol *SYMBOL;
 #define SNULL (SYMBOL) NULL
 
 /* Symbol table routines */
-SYMBOL insert(char *, int, int);
+SYMBOL insert(char *, int, int, int, int, char*);
 SYMBOL lookup(char *);
 
 /* Stuff for generating intermediate code */
@@ -110,7 +110,7 @@ void backpatch(QUADLIST, int);
 
 extern int nextquad, offsetnow, currentlevel;
 
-void printsymbtab();
+void printsymbtab(char *namespaces);
 
 void printmcode();
 
