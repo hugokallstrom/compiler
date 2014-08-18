@@ -160,5 +160,6 @@ int main(void) {
 	yyparse();
 	printsymbtab();
 	printmcode();
+ 	yylex_destroy();
 	return 0;
 }
