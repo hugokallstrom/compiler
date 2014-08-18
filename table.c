@@ -10,12 +10,12 @@ int nextquad, offsetnow, currentlevel;
 int tempcount = 0;
 struct _symbol tempvars[6] =    	/* temporary variables */
 {
-	{"temp0" ,0, TEMP, 0, 0, 0, "", SNULL},
-	{"temp1" ,0, TEMP, 0, 0, 0, "", SNULL},
-	{"temp2" ,0, TEMP, 0, 0, 0, "", SNULL},
-	{"temp3" ,0, TEMP, 0, 0, 0, "", SNULL},
-	{"temp4" ,0, TEMP, 0, 0, 0, "", SNULL},
-	{"temp5" ,0, TEMP, 0, 0, 0, "", SNULL}
+	{"temp0" ,0, TEMP, 0, 0, 0,"", SNULL},
+	{"temp1" ,0, TEMP, 0, 0, 0,"", SNULL},
+	{"temp2" ,0, TEMP, 0, 0, 0,"", SNULL},
+	{"temp3" ,0, TEMP, 0, 0, 0,"", SNULL},
+	{"temp4" ,0, TEMP, 0, 0, 0,"", SNULL},
+	{"temp5" ,0, TEMP, 0, 0, 0,"", SNULL}
 };
 
 static SYMBOL symbtab = SNULL;
@@ -23,14 +23,14 @@ static SYMBOL symbtab = SNULL;
 /* SYMBOL TABLE ROUTINES  */
 
 /* insert - insert new identifier in symbol table */
-SYMBOL insert(char *name, int type, int class, int offset, int level, char *namespaces)
+SYMBOL insert(char *name, int type, int class, int offset, int level, char *nspace)
 {
 	SYMBOL r;
 	r = symbtab;
 	while (r != SNULL)
-		if (strcmp(r->id, name) == 0) {
+		if ((strcmp(r->id, name) == 0) && (strcmp(r->nspace, nspace) == 0)) {
 			if (class != CONST)
-				/*tblerror("identifier multiply declared");*/
+				tblerror("identifier multiply declared");
 			return(r);
 		} else
 			r = r->nextsym;
@@ -39,11 +39,11 @@ SYMBOL insert(char *name, int type, int class, int offset, int level, char *name
 		exit(1);
 	}
 	strcpy(r->id, name);
+	strcpy(r->nspace, nspace);
 	r->type = type;
 	r->class = class;
 	r->level = level;
 	r->offset = offset;
-	r->namespaces = namespaces;
 	r->nextsym = symbtab;
 	symbtab = r;
 	return(r);
@@ -57,7 +57,7 @@ SYMBOL lookup(char *s)
 		if (strcmp(sp->id, s) == 0)
 			return(sp);
 	tblerror("identifier not declared");    /* id not found */
-	return(insert(s, NOTYPE, UNDEF, 0, 0, ""));
+	return(insert(s, NOTYPE, UNDEF, 0, 0,""));
 }
 
 
@@ -159,15 +159,14 @@ char *op[100] = {
 
 FILE *ptree;	/* file for output */
 
-void printsymbtab(char *namespaces)
+void printsymbtab(char *nspace)
 {
-	fprintf(stderr, "%s:\n", namespaces);
+	fprintf(stderr, "%s:\n", nspace);
 	SYMBOL sp;
 	for (sp = symbtab; sp != SNULL; sp = sp->nextsym) {
-		/*if(strcmp(sp->namespaces, namespaces) == 0) {*/
-			fprintf(stderr, "%-9.9stype %s class %s offset%3d level%3d namespaces %s\n",
-			sp->id, typ[sp->type], cl[sp->class], sp->offset, sp->level, sp->namespaces);
-		/*}*/
+		if(strcmp(nspace, sp->nspace) == 0)
+			fprintf(stderr, "%-9.9stype %s class %s offset%3d level%3d namespace %s\n",
+				sp->id, typ[sp->type], cl[sp->class], sp->offset, sp->level, sp->nspace);
 	}
 	fprintf(stderr, "\n");
 }

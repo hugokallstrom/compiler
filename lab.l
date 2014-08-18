@@ -27,10 +27,11 @@ struct key {
 	"integer", INTSY,
 	"program", PROGSY,
 	"read", READSY,
+	"repeat", REPEATSY,
 	"then", THENSY,
+	"until", UNTILSY,
 	"while",WHILESY,
-	"write",WRITESY,
-	"repeat",REPEATSY
+	"write",WRITESY
 };
 %}
 LET		[a-zA-Z]

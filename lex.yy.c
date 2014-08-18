@@ -500,12 +500,13 @@ struct key {
 	"integer", INTSY,
 	"program", PROGSY,
 	"read", READSY,
+	"repeat", REPEATSY,
 	"then", THENSY,
+	"until", UNTILSY,
 	"while",WHILESY,
-	"write",WRITESY,
-	"repeat",REPEATSY
+	"write",WRITESY
 };
-#line 509 "lex.yy.c"
+#line 510 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -692,9 +693,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 39 "lab.l"
+#line 40 "lab.l"
 
-#line 698 "lex.yy.c"
+#line 699 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -779,92 +780,92 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 40 "lab.l"
+#line 41 "lab.l"
 {echoo(); return PERIOD;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 41 "lab.l"
+#line 42 "lab.l"
 {echoo(); return SEMI;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 42 "lab.l"
+#line 43 "lab.l"
 {echoo(); return COMMA;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 43 "lab.l"
+#line 44 "lab.l"
 {echoo(); yylval.val=ASS; return ASSIGN;} /* fix */
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 44 "lab.l"
+#line 45 "lab.l"
 {echoo(); return LPAREN;}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 45 "lab.l"
+#line 46 "lab.l"
 {echoo(); return RPAREN;}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 46 "lab.l"
+#line 47 "lab.l"
 {echoo(); return COLON;}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 47 "lab.l"
+#line 48 "lab.l"
 {echoo(); yylval.val=EQ; return RELOP;}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 48 "lab.l"
+#line 49 "lab.l"
 {echoo(); yylval.val=NE; return RELOP;}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 49 "lab.l"
+#line 50 "lab.l"
 {echoo(); yylval.val=LE; return RELOP;}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 50 "lab.l"
+#line 51 "lab.l"
 {echoo(); yylval.val=LT; return RELOP;}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 51 "lab.l"
+#line 52 "lab.l"
 {echoo(); yylval.val=GE; return RELOP;}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 52 "lab.l"
+#line 53 "lab.l"
 {echoo(); yylval.val=GT; return RELOP;}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 53 "lab.l"
+#line 54 "lab.l"
 {echoo(); yylval.val=PLUS; return ADDOP;}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 54 "lab.l"
+#line 55 "lab.l"
 {echoo(); yylval.val=MINUS; return ADDOP;}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 55 "lab.l"
+#line 56 "lab.l"
 {echoo(); yylval.val=TIMES; return MULOP;}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 56 "lab.l"
+#line 57 "lab.l"
 {echoo(); yylval.val=PARTS; return MULOP;}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 58 "lab.l"
+#line 59 "lab.l"
 {
 	int res,i;  /*upper case must be transformed to lower */
 	echoo();
@@ -884,7 +885,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 75 "lab.l"
+#line 76 "lab.l"
 {
 	char *maxint="32768";
 	echoo();
@@ -909,12 +910,12 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 97 "lab.l"
+#line 98 "lab.l"
 {echoo();}
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 98 "lab.l"
+#line 99 "lab.l"
 {
 	int noofblanks;
 	noofblanks=8-(position%8); /*works only for default tab*/
@@ -928,7 +929,7 @@ YY_RULE_SETUP
 case 22:
 /* rule 22 can match eol */
 YY_RULE_SETUP
-#line 108 "lab.l"
+#line 109 "lab.l"
 {
 	echoo(); 
 	if (err) {
@@ -945,7 +946,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 122 "lab.l"
+#line 123 "lab.l"
 {       /*illegal symbol*/	
 	echoo();
 	error(1);
@@ -954,10 +955,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 127 "lab.l"
+#line 128 "lab.l"
 ECHO;
 	YY_BREAK
-#line 961 "lex.yy.c"
+#line 962 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1955,7 +1956,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 127 "lab.l"
+#line 128 "lab.l"
 
 
 

@@ -47,7 +47,7 @@
 
 /* GENERAL DEFINITIONS, TYPE AND VARIABLE DECLARATIONS */
 
-#define NKEYS           13   /* number of keywords */ 
+#define NKEYS           14   /* number of keywords */ 
 #define MAXERR          10   /* max errors per row */
 #define LINELENGTH      80
 
@@ -63,7 +63,7 @@ struct _symbol {
 	int level;	             /* static level */
 	int offset;	             /* offset in block */
 	int value;	             /* value for constant */
-	char *namespaces;             /* namespace */
+	char nspace[MAXIDLENGTH];
 	struct _symbol *nextsym;     /* next symbol */
 };
  
@@ -110,7 +110,7 @@ void backpatch(QUADLIST, int);
 
 extern int nextquad, offsetnow, currentlevel;
 
-void printsymbtab(char *namespaces);
+void printsymbtab(char*);
 
 void printmcode();
 
