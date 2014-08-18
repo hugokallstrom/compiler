@@ -65,20 +65,13 @@ SYMBOL lookup(char *s)
 
 SYMBOL emit(int op, SYMBOL a1, SYMBOL a2, int jmp)
 {
-/*	fprintf(stderr, "\nEMIT börjar OP: %d\n", op);*/
 	SYMBOL p;
 	if (a1 != SNULL)
-	{
-/*	fprintf(stderr, "a1: %s\n", a1->id);*/
 		if (a1->class == TEMP)
 			tempcount--;
-	}
 	if (a2 != SNULL)
-	{
-/*	fprintf(stderr, "a2: %s\n", a2->id);*/
-		if(a2->class == TEMP)
+		if (a2->class == TEMP)
 			tempcount--;
-	}
 	if (tempcount >= 6) {
 		fprintf(stderr, "gen: run out of space for temp.vars.\n");
 		exit(1);
@@ -86,7 +79,6 @@ SYMBOL emit(int op, SYMBOL a1, SYMBOL a2, int jmp)
 	if (op < EQ || op == CALL) {		/* Use temporary variable */
 		p = tempvars + tempcount;
 		p->offset = tempcount++;   /* Offset for temp.vars.=tempno */
-/*	fprintf(stderr, "Symbol som returneras: %s %d %p\n", p->id, p->offset, p);*/
 	}
 	else
 		p = SNULL;
@@ -161,22 +153,22 @@ FILE *ptree;	/* file for output */
 
 void printsymbtab(char *nspace)
 {
-	fprintf(stderr, "%s:\n", nspace);
+	fprintf(ptree, "%s:\n", nspace);
 	SYMBOL sp;
 	for (sp = symbtab; sp != SNULL; sp = sp->nextsym) {
 		if(strcmp(nspace, sp->nspace) == 0)
-			fprintf(stderr, "%-9.9stype %s class %s offset%3d level%3d namespace %s\n",
-				sp->id, typ[sp->type], cl[sp->class], sp->offset, sp->level, sp->nspace);
+			fprintf(ptree, "%-9.9stype %s class %s offset%3d level%3d\n",
+				sp->id, typ[sp->type], cl[sp->class], sp->offset, sp->level);
 	}
-	fprintf(stderr, "\n");
+	fprintf(ptree, "\n");
 }
 
 void printmcode(void)
 {
 	int n;
-	fprintf(stderr,"\n");
+	fprintf(ptree,"\n");
 	for (n = 0; n < nextquad; n++)
-		fprintf(stderr, "%4d:\t%s\t%s\t%s\t%4d\n",
+		fprintf(ptree, "%4d:\t%s\t%s\t%s\t%4d\n",
 				n, op[mcodetab[n].operation],
 				mcodetab[n].arg1 != 0 ? mcodetab[n].arg1->id : "",
 				mcodetab[n].arg2 != 0 ? mcodetab[n].arg2->id : "",

@@ -63,7 +63,7 @@ struct _symbol {
 	int level;	             /* static level */
 	int offset;	             /* offset in block */
 	int value;	             /* value for constant */
-	char nspace[MAXIDLENGTH];
+	char nspace[MAXIDLENGTH];    /* namespace */
 	struct _symbol *nextsym;     /* next symbol */
 };
  

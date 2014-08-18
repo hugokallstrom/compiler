@@ -152,16 +152,15 @@ exprlist	:	exprlist COMMA expr	{ for(int i = 0 ; i < s ; i++)
 							$$[i] = $1[i];
 						  s++;
 						  $$[s] = $3.place; }
-		|	expr			{ fprintf(stderr, "\n\nHIT:: %s\n\n", $1.place->id);
-						  $$[s] = $1.place; }
+		|	expr			{ $$[s] = $1.place; }
 		;
 
-expr		:	aexp RELOP aexp			{ $$.place = emit($2, $1.place, $3.place, 0);
-							  $$.truelist = makelist(nextquad-1);
-							  $$.falselist = makelist(nextquad);
-							  emit(GOTO, SNULL, SNULL, -1); }
+expr		:	aexp RELOP aexp		{ $$.place = emit($2, $1.place, $3.place, 0);
+						  $$.truelist = makelist(nextquad-1);
+						  $$.falselist = makelist(nextquad);
+						  emit(GOTO, SNULL, SNULL, -1); }
 						
-		|	aexp 				{ $$.place = $1.place; }
+		|	aexp 			{ $$.place = $1.place; }
 		;
 
 aexp		:	aexp ADDOP aexp			{ $$.place = emit($2, $1.place, $3.place, 0); }
@@ -172,8 +171,7 @@ aexp		:	aexp ADDOP aexp			{ $$.place = emit($2, $1.place, $3.place, 0); }
 							  $$.falselist = $2.falselist; }
 		|	aexp				{ $$.place = $1.place; }
 		|	IDENT				{ $$.place = lookup($1); }
-		|	INTCONST			{ fprintf(stderr, "\n\nns: %s\n\n", currns[curr]);
-							  $$.place = insert($1, 1, 4, offset[curr], level, currns[curr]); }
+		|	INTCONST			{ $$.place = insert($1, 1, 4, offset[curr], level, currns[curr]); }
 		;
 
 arglist		:	exprlist	{ for(int i = 0 ; i <= s ; i++)
@@ -190,9 +188,10 @@ int yyerror(const char *msg) {
 
 int main(void) {
 	yyparse();
-	printmcode();
+	ptree = stdout;
 	for(int i = 0; i <= ns; i++)
 		printsymbtab(nspace[i]);
+	printmcode();
 	for(int i = 0; i <= ns; i++)
 		free(nspace[i]);
 	for(int i = 0; i <= curr; i++)

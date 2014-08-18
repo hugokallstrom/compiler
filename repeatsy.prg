@@ -11,7 +11,6 @@ begin
       write(c);
    end until (b = c);
       read(c);
-      x := b < c;
    while (x > 0) do begin
       if (b = c) then
           write(b);

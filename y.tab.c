@@ -522,8 +522,8 @@ static const yytype_uint8 yyrline[] =
        0,    51,    51,    55,    64,    65,    68,    71,    74,    76,
       80,    81,    83,    86,    90,    91,    94,   104,   107,   113,
      116,   117,   120,   121,   124,   127,   129,   132,   135,   139,
-     142,   145,   151,   155,   159,   164,   167,   168,   169,   170,
-     173,   174,   175,   179,   182
+     142,   145,   151,   155,   158,   163,   166,   167,   168,   169,
+     172,   173,   174,   177,   180
 };
 #endif
 
@@ -1681,52 +1681,51 @@ yyreduce:
 
 /* Line 1806 of yacc.c  */
 #line 155 "lab.y"
-    { fprintf(stderr, "\n\nHIT:: %s\n\n", (yyvsp[(1) - (1)].exp).place->id);
-						  (yyval.symblist)[s] = (yyvsp[(1) - (1)].exp).place; }
+    { (yyval.symblist)[s] = (yyvsp[(1) - (1)].exp).place; }
     break;
 
   case 34:
 
 /* Line 1806 of yacc.c  */
-#line 159 "lab.y"
+#line 158 "lab.y"
     { (yyval.exp).place = emit((yyvsp[(2) - (3)].val), (yyvsp[(1) - (3)].exp).place, (yyvsp[(3) - (3)].exp).place, 0);
-							  (yyval.exp).truelist = makelist(nextquad-1);
-							  (yyval.exp).falselist = makelist(nextquad);
-							  emit(GOTO, SNULL, SNULL, -1); }
+						  (yyval.exp).truelist = makelist(nextquad-1);
+						  (yyval.exp).falselist = makelist(nextquad);
+						  emit(GOTO, SNULL, SNULL, -1); }
     break;
 
   case 35:
 
 /* Line 1806 of yacc.c  */
-#line 164 "lab.y"
+#line 163 "lab.y"
     { (yyval.exp).place = (yyvsp[(1) - (1)].exp).place; }
     break;
 
   case 36:
 
 /* Line 1806 of yacc.c  */
-#line 167 "lab.y"
+#line 166 "lab.y"
     { (yyval.exp).place = emit((yyvsp[(2) - (3)].val), (yyvsp[(1) - (3)].exp).place, (yyvsp[(3) - (3)].exp).place, 0); }
     break;
 
   case 37:
 
 /* Line 1806 of yacc.c  */
-#line 168 "lab.y"
+#line 167 "lab.y"
     { (yyval.exp).place = emit((yyvsp[(2) - (3)].val), (yyvsp[(1) - (3)].exp).place, (yyvsp[(3) - (3)].exp).place, 0); }
     break;
 
   case 38:
 
 /* Line 1806 of yacc.c  */
-#line 169 "lab.y"
+#line 168 "lab.y"
     { (yyval.exp).place = emit(CALL, (yyvsp[(1) - (4)].exp).place, SNULL, 0); }
     break;
 
   case 39:
 
 /* Line 1806 of yacc.c  */
-#line 170 "lab.y"
+#line 169 "lab.y"
     { (yyval.exp).place = (yyvsp[(2) - (3)].exp).place;
 							  (yyval.exp).truelist = (yyvsp[(2) - (3)].exp).truelist;
 							  (yyval.exp).falselist = (yyvsp[(2) - (3)].exp).falselist; }
@@ -1735,29 +1734,28 @@ yyreduce:
   case 40:
 
 /* Line 1806 of yacc.c  */
-#line 173 "lab.y"
+#line 172 "lab.y"
     { (yyval.exp).place = (yyvsp[(1) - (1)].exp).place; }
     break;
 
   case 41:
 
 /* Line 1806 of yacc.c  */
-#line 174 "lab.y"
+#line 173 "lab.y"
     { (yyval.exp).place = lookup((yyvsp[(1) - (1)].name)); }
     break;
 
   case 42:
 
 /* Line 1806 of yacc.c  */
-#line 175 "lab.y"
-    { fprintf(stderr, "\n\nns: %s\n\n", currns[curr]);
-							  (yyval.exp).place = insert((yyvsp[(1) - (1)].name), 1, 4, offset[curr], level, currns[curr]); }
+#line 174 "lab.y"
+    { (yyval.exp).place = insert((yyvsp[(1) - (1)].name), 1, 4, offset[curr], level, currns[curr]); }
     break;
 
   case 43:
 
 /* Line 1806 of yacc.c  */
-#line 179 "lab.y"
+#line 177 "lab.y"
     { for(int i = 0 ; i <= s ; i++)
 						emit(PARAM, (yyvsp[(1) - (1)].symblist)[i], SNULL, 0);
 					  s = 0; }
@@ -1766,7 +1764,7 @@ yyreduce:
 
 
 /* Line 1806 of yacc.c  */
-#line 1770 "y.tab.c"
+#line 1768 "y.tab.c"
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1997,7 +1995,7 @@ yyreturn:
 
 
 /* Line 2067 of yacc.c  */
-#line 184 "lab.y"
+#line 182 "lab.y"
 
 
 int yyerror(const char *msg) {
@@ -2007,9 +2005,10 @@ int yyerror(const char *msg) {
 
 int main(void) {
 	yyparse();
-	printmcode();
+	ptree = stdout;
 	for(int i = 0; i <= ns; i++)
 		printsymbtab(nspace[i]);
+	printmcode();
 	for(int i = 0; i <= ns; i++)
 		free(nspace[i]);
 	for(int i = 0; i <= curr; i++)
